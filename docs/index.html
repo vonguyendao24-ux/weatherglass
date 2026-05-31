@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Glass Demo</title>
+  <meta name="theme-color" content="#0f214c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="rain">
+  <div class="atmosphere"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand glass-panel">
+        <div>
+          <p class="brand-label">Weather Glass</p>
+          <p class="brand-subtitle">Dashboard thời tiết toàn quốc, bỏ qua quảng cáo</p>
+        </div>
+      </div>
+      <button id="logoutBtn" class="location-button glass-panel hidden">🚪 Đăng xuất</button>
+    </header>
+
+    <div class="login-screen" id="loginScreen">
+      <div class="login-card glass-panel">
+        <h1>Đăng nhập</h1>
+        <p>Truy cập dashboard thời tiết cho tất cả mọi người.</p>
+        <input id="loginUser" type="text" placeholder="Tên người dùng" autocomplete="username" />
+        <input id="loginPass" type="password" placeholder="Mật khẩu" autocomplete="current-password" />
+        <button id="loginBtn" class="theme-btn">Đăng nhập</button>
+        <p id="loginHint" class="login-hint">Nhập tên người dùng và mật khẩu bất kỳ để tiếp tục.</p>
+      </div>
+    </div>
+
+    <div class="dashboard hidden" id="dashboard">
+      <header class="topbar">
+        <div class="search-box glass-panel">
+          <span class="search-icon">🔍</span>
+          <div class="search-group">
+            <input id="searchInput" type="text" placeholder="Tìm city toàn quốc: Hà Nội, Đà Nẵng, Sa Pa..." />
+            <p class="search-hint" id="searchHint">Tìm kiếm theo tên thành phố, ví dụ: Hà Nội</p>
+          </div>
+        </div>
+        <button id="locateBtn" class="location-button glass-panel">📍 Định vị</button>
+      </header>
+
+      <main>
+        <section class="hero glass-panel">
+          <div class="hero-text">
+            <p class="city" id="cityName">Hà Nội</p>
+            <p class="date" id="todayDate">Thứ 6, 31/05/2026</p>
+            <p class="clock" id="timeLabel">12:00</p>
+            <div class="temp-block">
+              <h1 class="temp" id="temperature">28°C</h1>
+              <p class="condition" id="conditionText">Có mưa rải rác</p>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="weather-icon" id="weatherIcon">☔</div>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">💧</div>
+            <div>
+              <p class="stat-title">Độ ẩm</p>
+              <p class="stat-value" id="humidityValue">74%</p>
+            </div>
+          </article>
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">🌡️</div>
+            <div>
+              <p class="stat-title">Cảm giác</p>
+              <p class="stat-value" id="feelsValue">29°C</p>
+            </div>
+          </article>
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">🌬️</div>
+            <div>
+              <p class="stat-title">Tốc độ gió</p>
+              <p class="stat-value" id="windValue">12 km/h</p>
+            </div>
+          </article>
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">☁️</div>
+            <div>
+              <p class="stat-title">Mây che phủ</p>
+              <p class="stat-value" id="cloudValue">22%</p>
+            </div>
+          </article>
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">☀️</div>
+            <div>
+              <p class="stat-title">Chỉ số UV</p>
+              <p class="stat-value" id="uvValue">3</p>
+            </div>
+          </article>
+          <article class="stat-card glass-panel">
+            <div class="stat-icon">⚖️</div>
+            <div>
+              <p class="stat-title">Áp suất</p>
+              <p class="stat-value" id="pressureValue">1008 hPa</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="section-block">
+          <div class="section-header">
+            <h2>Thời tiết nổi bật toàn quốc</h2>
+            <span class="section-note">Cập nhật nhanh tại các thành phố lớn</span>
+          </div>
+          <div class="regional-cards" id="nearbyCities"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-header">
+            <h2>Dự báo theo giờ</h2>
+            <span class="section-note">Cập nhật dữ liệu mới nhất</span>
+          </div>
+          <div class="hourly-scroll" id="hourlyScroll"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-header">
+            <h2>Dự báo 7 ngày</h2>
+            <span class="section-note">Dự báo thời tiết theo ngày</span>
+          </div>
+          <div class="weekly-list" id="weeklyList"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch((err) => {
+          console.warn('Service Worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
